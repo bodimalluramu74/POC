@@ -30,7 +30,7 @@ resource "aws_subnet" "public_subnets" {
 }
 
 # -------------------------
-# Private Subnets (3)
+# Private Subnets 
 # -------------------------
 resource "aws_subnet" "private_subnets" {
   count = 3
