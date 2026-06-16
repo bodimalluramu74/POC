@@ -235,10 +235,5 @@ resource "aws_iam_role_policy_attachment" "ssm_attach" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
-resource "aws_instance" "Myinstance-1" {
-    ami = var.ami
-    instance_type = var.instance_types[2]
-    tags = var.instance_tags
-  
-}
+
 

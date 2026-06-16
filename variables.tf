@@ -9,7 +9,7 @@ variable "ami" {
     default = "ami-0521cb2d60cfbb1a6"
 }
 
-variable "count" {
+variable "instance_count" {
     type = number
     default = 2
   }
