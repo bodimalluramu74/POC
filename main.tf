@@ -241,3 +241,4 @@ resource "aws_instance" "Myinstance-1" {
     tags = var.instance_tags
   
 }
+
