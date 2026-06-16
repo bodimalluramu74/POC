@@ -1,31 +1,19 @@
-variable "instance_type" {
-    type = string
-    default = "t3.micro"
-  
+variable "instance_count" {
+  description = "Number of instances"
+  type        = number
 }
 
 variable "ami" {
-    type = string
-    default = "ami-0521cb2d60cfbb1a6"
+  description = "AMI ID"
+  type        = string
 }
 
-variable "instance_count" {
-    type = number
-    default = 2
-  }
-
 variable "instance_types" {
-    type = list(string)
-    default = ["t3.micro","t3.small","t3.medium","t3.large"]
-  
+  description = "List of instance types"
+  type        = list(string)
 }
 
 variable "instance_tags" {
-    type = map(string)
-    default = {
-      "name" = "my-first_intance"
-      "Environment"= "DEV"
-    }
-  
+  description = "EC2 tags"
+  type        = map(string)
 }
-

@@ -1,49 +1,32 @@
-name: Terraform CI/CD
+name: Terraform TQA Deployment
 
 on:
   push:
     branches:
-      - dev
       - tqa
-      - main
 
 jobs:
   terraform:
+    name: Terraform Apply TQA
     runs-on: ubuntu-latest
 
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
 
-      - name: Set Environment Variables
-        run: |
-          if [[ "${GITHUB_REF##*/}" == "dev" ]]; then
-            echo "ENV=dev" >> $GITHUB_ENV
-          elif [[ "${GITHUB_REF##*/}" == "tqa" ]]; then
-            echo "ENV=tqa" >> $GITHUB_ENV
-          else
-            echo "ENV=prod" >> $GITHUB_ENV
-          fi
+    - name: Terraform Init
+      run: terraform init
 
-      - name: Terraform Init
-        run: terraform init
+    - name: Select TQA Workspace
+      run: |
+        terraform workspace list
+        terraform workspace select tqa || terraform workspace new tqa
 
-      - name: Select or Create Workspace
-        run: |
-          terraform workspace select $ENV || terraform workspace new $ENV
+    - name: Terraform Plan
+      run: terraform plan -var-file="tqa.tfvars"
 
-      - name: Terraform Validate
-        run: terraform validate
-
-      - name: Terraform Plan
-        run: terraform plan -var-file="${ENV}.tfvars"
-
-      - name: Terraform Apply
-        run: terraform apply -auto-approve -var-file="${ENV}.tfvars"
+    - name: Terraform Apply
+      run: terraform apply -auto-approve -var-file="tqa.tfvars"
